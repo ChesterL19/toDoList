@@ -21,7 +21,7 @@ import {
   Check,
 } from "lucide-react";
 
-const SideBar = ({ collapsed, onToggle }) => {
+const SideBar = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("Folder");
@@ -80,20 +80,10 @@ const SideBar = ({ collapsed, onToggle }) => {
   };
 
   return (
-    <div className={`flex flex-col h-screen bg-zinc-900 min-h-screen text-white transition-all duration-300 ${
-      collapsed ? 'px-2 py-2 w-16' : 'px-5 py-2 w-64'
-    }`}>
+    <div className="flex flex-col h-screen bg-zinc-900 min-h-screen text-white px-5 py-2 w-64">
       {/* Header */}
-      <div className={`py-2 border-b border-emerald-400 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
-        {!collapsed && <h1 className="text-xl font-bold text-white">Gawâ</h1>}
-        <button
-          onClick={onToggle}
-          className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
-        >
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+      <div className="py-2 border-b border-emerald-400 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-white">Gawâ</h1>
       </div>
 
       <div className="mt-5">
@@ -101,15 +91,13 @@ const SideBar = ({ collapsed, onToggle }) => {
         <div className="py-2">
           <button
             onClick={() => setShowAddForm(!showAddForm)}
-            className={`flex items-center justify-center w-full rounded-lg bg-emerald-400 hover:bg-emerald-400/50 hover:text-white transition-all duration-200 cursor-pointer group ${
-              collapsed ? 'px-2 py-3' : 'px-4 py-3'
-            }`}
+            className="flex items-center justify-center w-full rounded-lg bg-emerald-400 hover:bg-emerald-400/50 hover:text-white transition-all duration-200 cursor-pointer group px-4 py-3"
           >
             <Plus className="w-5 h-5 text-white" />
-            {!collapsed && <span className="font-medium ml-3">Add Folder</span>}
+            <span className="font-medium ml-3">Add Folder</span>
           </button>
 
-          {showAddForm && !collapsed && (
+          {showAddForm && (
             <div className="px-4 py-4">
               <input
                 type="text"
@@ -178,9 +166,7 @@ const SideBar = ({ collapsed, onToggle }) => {
             {folders.map((folder) => (
               <div
                 key={folder.id}
-                className={`flex items-center rounded-lg transition-all duration-200 cursor-pointer ${
-                  collapsed ? 'justify-center px-2 py-3' : 'justify-between px-4 py-3'
-                } ${
+                className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer ${
                   folder.active
                     ? "bg-emerald-500 text-white shadow-sm border border-white/20"
                     : "hover:bg-emerald-500/10 text-white/80 hover:text-white hover:shadow-sm"
@@ -190,13 +176,13 @@ const SideBar = ({ collapsed, onToggle }) => {
                   {React.createElement(iconMap[folder.iconName], {
                     className: "w-5 h-5 text-white",
                   })}
-                  {!collapsed && <span className="font-medium text-sm ml-3">{folder.name}</span>}
-                </div>
-                {!collapsed && (
-                  <span className="text-xs bg-white/20 px-2 py-1 rounded-full font-medium">
-                    {folder.count}
+                  <span className="font-medium text-sm ml-3">
+                    {folder.name}
                   </span>
-                )}
+                </div>
+                <span className="text-xs bg-white/20 px-2 py-1 rounded-full font-medium">
+                  {folder.count}
+                </span>
               </div>
             ))}
           </nav>
