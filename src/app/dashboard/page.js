@@ -8,7 +8,11 @@ import { Check, Folder, Target, Flame } from "lucide-react";
 export default function Page() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [task, setTask] = useState({});
+  const [dailyQuote, setDailyQuote] = useState({
+    text: "Loading...",
+    author: "Loading...",
+    date: null,
+  });
 
   const date = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -23,14 +27,37 @@ export default function Page() {
       router.push("/"); // not logged in, go to login
     } else {
       setUser(storedUser);
+      fetchDailyQuote();
     }
   }, []);
+
+  const fetchDailyQuote = async () => {
+    try {
+      const today = new Date().toDateString();
+      if (dailyQuote.date === today) {
+        return;
+      }
+      const response = await fetch("https://api.quotable.io/random");
+      const data = await response.json();
+      setDailyQuote({
+        text: data.content,
+        author: data.author,
+        date: today,
+      });
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+      setDailyQuote({
+        text: "The way to get started is to quit talking and begin doing.",
+        author: "Walt Disney",
+      });
+    }
+  };
 
   if (!user) return <p>Loading...</p>;
 
   return (
     <div className="flex w-full min-h-screen bg-stone-100 text-black">
-      <div className="w-64 bg-white min-h-screen">
+      <div className="w-64 bg-white h-screen sticky top-0 overflow-y-auto">
         <SideBar />
       </div>
 
@@ -39,7 +66,7 @@ export default function Page() {
           <NavBar />
         </div>
 
-        <div className="flex-1 p-8 bg-gray-50 min-h-screen">
+        <div className="flex-1 p-8 bg-gray-50 h-screen overflow-y-auto">
           {/* Welcome Section */}
           <div className="mb-8">
             <div className=" flex items-center justify-between mb-6">
@@ -119,6 +146,77 @@ export default function Page() {
                 Day Streak
               </h3>
               <p className="text-gray-600 text-sm">Keep it up!</p>
+            </div>
+          </div>
+
+          {/* Heatmap and Quote Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Activity Heatmap - Left Side */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Activity Heatmap
+                </h3>
+                <span className="text-sm text-gray-600">Last 90 days</span>
+              </div>
+
+              <div className="grid grid-cols-13 gap-0.5 mb-4">
+                {Array.from({ length: 91 }, (_, i) => {
+                  const intensity = Math.floor(Math.random() * 5);
+                  return (
+                    <div
+                      key={i}
+                      className={`w-3 h-3 rounded-sm ${
+                        intensity === 0
+                          ? "bg-gray-200"
+                          : intensity === 1
+                            ? "bg-emerald-100"
+                            : intensity === 2
+                              ? "bg-emerald-200"
+                              : intensity === 3
+                                ? "bg-emerald-300"
+                                : "bg-emerald-400"
+                      }`}
+                      title={`${intensity} completed tasks`}
+                    ></div>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-gray-500">Less</span>
+                <div className="flex gap-1">
+                  {[0, 1, 2, 3, 4].map((level) => (
+                    <div
+                      key={level}
+                      className={`w-3 h-3 rounded-sm ${
+                        level === 0
+                          ? "bg-gray-200"
+                          : level === 1
+                            ? "bg-emerald-200"
+                            : level === 2
+                              ? "bg-emerald-300"
+                              : level === 3
+                                ? "bg-emerald-400"
+                                : "bg-emerald-500"
+                      }`}
+                    ></div>
+                  ))}
+                </div>
+                <span className="text-gray-500">More</span>
+              </div>
+            </div>
+
+            {/* Daily Quote - Right Side */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center justify-center">
+              <div className="text-center">
+                <blockquote className="text-lg italic text-gray-700 mb-3">
+                  &quot;{dailyQuote.text}&quot;
+                </blockquote>
+                <cite className="text-sm text-gray-500">
+                  — {dailyQuote.author}
+                </cite>
+              </div>
             </div>
           </div>
         </div>

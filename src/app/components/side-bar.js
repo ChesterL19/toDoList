@@ -80,7 +80,7 @@ const SideBar = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-900 min-h-screen text-white px-5 py-2 w-64">
+    <div className="flex flex-col h-screen bg-zinc-900 text-white px-5 py-2 w-64">
       {/* Header */}
       <div className="py-2 border-b border-emerald-400 flex items-center justify-between">
         <h1 className="text-xl font-bold text-white">Gawâ</h1>
@@ -161,7 +161,7 @@ const SideBar = () => {
         </div>
 
         {/* Folders */}
-        <div className="flex-1 py-4">
+        <div className="flex-1 py-4 overflow-y-auto">
           <nav className="space-y-2">
             {folders.map((folder) => (
               <div

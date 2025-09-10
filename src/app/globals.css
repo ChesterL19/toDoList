@@ -31,3 +31,7 @@ body {
     Roboto,
     sans-serif;
 }
+
+.grid-cols-13 {
+  grid-template-columns: repeat(13, 40px);
+}
