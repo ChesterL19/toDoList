@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 const Create = () => {
   const router = useRouter();
@@ -40,11 +41,12 @@ const Create = () => {
     <div>
       <div className="min-h-screen w-full flex overflow-hidden text-black">
         {/*background*/}
-        <div className="w-1/2 h-screen ">
-          <img
+        <div className="w-1/2 h-screen relative">
+          <Image
             src="https://images.unsplash.com/photo-1604079681864-c6fbd7eb109c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="login"
-            className="w-full h-full object-fill"
+            fill
+            className="object-cover"
           />
         </div>
 
