@@ -22,6 +22,28 @@ export default function Page() {
   });
 
   useEffect(() => {
+    const fetchDailyQuote = async () => {
+      try {
+        const today = new Date().toDateString();
+        if (dailyQuote.date === today) {
+          return;
+        }
+        const response = await fetch("https://api.quotable.io/random");
+        const data = await response.json();
+        setDailyQuote({
+          text: data.content,
+          author: data.author,
+          date: today,
+        });
+      } catch (error) {
+        console.error("Error fetching quote:", error);
+        setDailyQuote({
+          text: "The way to get started is to quit talking and begin doing.",
+          author: "Walt Disney",
+        });
+      }
+    };
+
     const storedUser = JSON.parse(localStorage.getItem("currentUser"));
     if (!storedUser) {
       router.push("/"); // not logged in, go to login
@@ -29,29 +51,7 @@ export default function Page() {
       setUser(storedUser);
       fetchDailyQuote();
     }
-  }, []);
-
-  const fetchDailyQuote = async () => {
-    try {
-      const today = new Date().toDateString();
-      if (dailyQuote.date === today) {
-        return;
-      }
-      const response = await fetch("https://api.quotable.io/random");
-      const data = await response.json();
-      setDailyQuote({
-        text: data.content,
-        author: data.author,
-        date: today,
-      });
-    } catch (error) {
-      console.error("Error fetching quote:", error);
-      setDailyQuote({
-        text: "The way to get started is to quit talking and begin doing.",
-        author: "Walt Disney",
-      });
-    }
-  };
+  }, [router, dailyQuote.date]);
 
   if (!user) return <p>Loading...</p>;
 
