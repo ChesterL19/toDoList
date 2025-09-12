@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import { useFolders } from "../context/folderContext";
+import Link from "next/link";
 import {
   Calendar,
   Briefcase,
@@ -22,6 +24,7 @@ import {
 } from "lucide-react";
 
 const SideBar = () => {
+  const { folders, addFolder } = useFolders();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("Folder");
@@ -45,19 +48,6 @@ const SideBar = () => {
     { name: "Backpack", icon: Backpack },
     { name: "Check", icon: Check },
   ];
-
-  const [folders, setFolders] = useState([
-    { id: 1, name: "Today", iconName: "Calendar", count: 5, active: true },
-    { id: 2, name: "Work", iconName: "Briefcase", count: 3, active: false },
-    {
-      id: 3,
-      name: "School",
-      iconName: "GraduationCap",
-      count: 2,
-      active: false,
-    },
-    { id: 4, name: "Personal", iconName: "User", count: 1, active: false },
-  ]);
 
   const iconMap = {
     Calendar: Calendar,
@@ -133,13 +123,13 @@ const SideBar = () => {
                         newFolderName.charAt(0).toUpperCase() +
                         newFolderName.slice(1);
                       const newFolder = {
-                        id: folders.length + 1,
+                        id: crypto.randomUUID(),
                         name: capitalizedName,
                         iconName: selectedIcon,
                         count: 0,
                         active: false,
                       };
-                      setFolders([...folders, newFolder]);
+                      addFolder(newFolder);
                       setNewFolderName("");
                       setSelectedIcon("Folder");
                       setShowAddForm(false);
@@ -164,8 +154,9 @@ const SideBar = () => {
         <div className="flex-1 py-4 overflow-y-auto">
           <nav className="space-y-2">
             {folders.map((folder) => (
-              <div
+              <Link
                 key={folder.id}
+                href={`/f/${folder.id}`}
                 className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer ${
                   folder.active
                     ? "bg-emerald-500 text-white shadow-sm border border-white/20"
@@ -183,7 +174,7 @@ const SideBar = () => {
                 <span className="text-xs bg-white/20 px-2 py-1 rounded-full font-medium">
                   {folder.count}
                 </span>
-              </div>
+              </Link>
             ))}
           </nav>
         </div>
