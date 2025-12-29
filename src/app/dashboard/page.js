@@ -28,7 +28,18 @@ export default function Page() {
         if (dailyQuote.date === today) {
           return;
         }
-        const response = await fetch("https://api.quotable.io/random");
+        const response = await fetch("https://api.quotable.io/random", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         setDailyQuote({
           text: data.content,
@@ -40,6 +51,7 @@ export default function Page() {
         setDailyQuote({
           text: "The way to get started is to quit talking and begin doing.",
           author: "Walt Disney",
+          date: new Date().toDateString(),
         });
       }
     };
