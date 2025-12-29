@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useFolders } from "../context/folderContext";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Calendar,
@@ -21,13 +22,19 @@ import {
   Mountain,
   Backpack,
   Check,
+  Pencil,
+  X,
 } from "lucide-react";
 
-const SideBar = () => {
-  const { folders, addFolder } = useFolders();
+const SideBar = ({ onLinkClick }) => {
+  const { folders, addFolder, updateFolder } = useFolders();
+  const pathname = usePathname();
   const [showAddForm, setShowAddForm] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("Folder");
+  const [editingFolderId, setEditingFolderId] = useState(null);
+  const [editFolderName, setEditFolderName] = useState("");
+  const [editIconName, setEditIconName] = useState("Folder");
 
   const availableIcons = [
     { name: "Folder", icon: Folder, default: true },
@@ -154,27 +161,107 @@ const SideBar = () => {
         <div className="flex-1 py-4 overflow-y-auto">
           <nav className="space-y-2">
             {folders.map((folder) => (
-              <Link
-                key={folder.id}
-                href={`/f/${folder.id}`}
-                className={`flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer ${
-                  folder.active
-                    ? "bg-emerald-500 text-white shadow-sm border border-white/20"
-                    : "hover:bg-emerald-500/10 text-white/80 hover:text-white hover:shadow-sm"
-                }`}
-              >
-                <div className="flex items-center">
-                  {React.createElement(iconMap[folder.iconName], {
-                    className: "w-5 h-5 text-white",
-                  })}
-                  <span className="font-medium text-sm ml-3">
-                    {folder.name}
-                  </span>
-                </div>
-                <span className="text-xs bg-white/20 px-2 py-1 rounded-full font-medium">
-                  {folder.count}
-                </span>
-              </Link>
+              <div key={folder.id} className="group relative">
+                {editingFolderId === folder.id ? (
+                  <div className="px-4 py-3 rounded-lg bg-emerald-500/20 border border-emerald-400/30">
+                    <input
+                      type="text"
+                      value={editFolderName}
+                      onChange={(e) => setEditFolderName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-white/10 text-white placeholder-white/50 border border-white/20 focus:outline-none focus:border-white/40 transition-all duration-200 mb-2"
+                      placeholder="Folder name"
+                      autoFocus
+                    />
+                    <div className="grid grid-cols-4 gap-2 mb-2">
+                      {availableIcons.map((iconOption) => (
+                        <button
+                          key={iconOption.name}
+                          onClick={() => setEditIconName(iconOption.name)}
+                          className={`p-2 rounded-lg border-2 transition-all duration-200 ${
+                            editIconName === iconOption.name
+                              ? "border-emerald-400 bg-emerald-400/20"
+                              : "border-white/20 hover:border-white/40"
+                          }`}
+                        >
+                          <iconOption.icon className="w-4 h-4 text-white" />
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          if (editFolderName.trim()) {
+                            const capitalizedName =
+                              editFolderName.charAt(0).toUpperCase() +
+                              editFolderName.slice(1);
+                            updateFolder(folder.id, {
+                              name: capitalizedName,
+                              iconName: editIconName,
+                            });
+                            setEditingFolderId(null);
+                            setEditFolderName("");
+                            setEditIconName("Folder");
+                          }
+                        }}
+                        className="px-3 py-1 bg-emerald-400/30 rounded text-sm hover:bg-emerald-400/40 transition-colors duration-200"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => {
+                          setEditingFolderId(null);
+                          setEditFolderName("");
+                          setEditIconName("Folder");
+                        }}
+                        className="px-3 py-1 bg-white/10 rounded text-sm hover:bg-white/20 transition-colors duration-200"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <Link
+                    href={`/f/${folder.id}`}
+                    onClick={() => {
+                      if (onLinkClick) {
+                        onLinkClick();
+                      }
+                    }}
+                    className={`relative flex items-center justify-between px-4 py-3 rounded-lg transition-all duration-200 cursor-pointer group ${
+                      pathname === `/f/${folder.id}`
+                        ? "bg-emerald-500 text-white shadow-sm border border-white/20"
+                        : "hover:bg-emerald-500/10 text-white/80 hover:text-white hover:shadow-sm"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      {React.createElement(iconMap[folder.iconName], {
+                        className: "w-5 h-5 text-white",
+                      })}
+                      <span className="font-medium text-sm ml-3">
+                        {folder.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs bg-white/20 px-2 py-1 rounded-full font-medium">
+                        {folder.count}
+                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setEditingFolderId(folder.id);
+                          setEditFolderName(folder.name);
+                          setEditIconName(folder.iconName);
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-white/20 text-white/60 hover:text-white transition-all duration-200 opacity-0 group-hover:opacity-100"
+                        title="Edit folder"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </Link>
+                )}
+              </div>
             ))}
           </nav>
         </div>
