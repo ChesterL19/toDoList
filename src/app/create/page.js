@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { UserPlus, User, Mail, Lock } from "lucide-react";
 
 const Create = () => {
   const router = useRouter();
@@ -12,7 +14,9 @@ const Create = () => {
   const [password, setPassword] = useState("");
 
   const isFormValid = fullName && email && userName && password;
-  const handleCreate = () => {
+  
+  const handleCreate = (e) => {
+    e.preventDefault();
     const newUser = {
       fullName,
       email,
@@ -27,7 +31,7 @@ const Create = () => {
     );
 
     if (alreadyExists) {
-      alert("Email or username already in use .");
+      alert("Email or username already in use.");
       return;
     }
 
@@ -38,69 +42,180 @@ const Create = () => {
   };
 
   return (
-    <div>
-      <div className="min-h-screen w-full flex overflow-hidden text-black">
-        {/*background*/}
-        <div className="w-1/2 h-screen relative">
-          <Image
-            src="https://images.unsplash.com/photo-1604079681864-c6fbd7eb109c?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="login"
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        {/*Login */}
-        <div className="flex flex-col justify-center items-center bg-white w-1/2 max-h-full gap-10 ">
-          <div className="flex flex-col w-72 gap-4 mt-4 ">
-            <h1 className="font-bold text-2xl mb-4 text-center">
-              Create Account
-            </h1>
-
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 shadow-sm focus-outline-none rounded-2xl hover:border-amber-400 bg-gray-100/80"
-            />
-
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 shadow-sm focus-outline-none rounded-2xl hover:border-amber-400 bg-gray-100/80"
-            />
-
-            <input
-              type="username"
-              placeholder="Username"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 shadow-sm focus-outline-none rounded-2xl hover:border-amber-400 bg-gray-100/80"
-            />
-
-            <input
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 shadow-sm focus-outline-none rounded-2xl hover:border-amber-400 bg-gray-100/80"
-            />
-
-            <button
-              onClick={handleCreate}
-              className={` text-white px-4 py-2 rounded-2xl  mt-4 w-full ${
-                isFormValid
-                  ? "bg-amber-500 text-white hover-amber-600"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              Create Account
-            </button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-white p-4">
+      <div className="w-full max-w-md mx-auto">
+        {/* Logo/Brand Section */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+            <UserPlus className="w-8 h-8 text-white" />
           </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+          <p className="text-gray-600">Sign up to get started with your tasks</p>
         </div>
+
+        {/* Form Section */}
+        <form
+          onSubmit={handleCreate}
+          className="space-y-6"
+        >
+          {/* Full Name Field */}
+          <div>
+            <label
+              htmlFor="fullName"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Full Name
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                id="fullName"
+                type="text"
+                value={fullName}
+                placeholder="Enter your full name"
+                onChange={(e) => setFullName(e.target.value)}
+                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Email Field */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Email
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                placeholder="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Username Field */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Username
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                id="username"
+                type="text"
+                value={userName}
+                placeholder="Choose a username"
+                onChange={(e) => setUserName(e.target.value)}
+                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Password Field */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Password
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                placeholder="Create a password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Create Account Button */}
+          <button
+            type="submit"
+            disabled={!isFormValid}
+            className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 transform shadow-lg hover:shadow-xl ${
+              isFormValid
+                ? "bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 hover:scale-[1.02] active:scale-[0.98]"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+          >
+            <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+              <UserPlus
+                className={`h-5 w-5 transition-colors ${
+                  isFormValid
+                    ? "text-emerald-200 group-hover:text-emerald-100"
+                    : "text-gray-400"
+                }`}
+              />
+            </span>
+            Create Account
+          </button>
+
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          {/* Google Sign Up */}
+          <button
+            type="button"
+            className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200"
+          >
+            <Image
+              className="h-5 w-5 mr-2"
+              src="/google.png"
+              alt="Google logo"
+              width={20}
+              height={20}
+            />
+            Sign up with Google
+          </button>
+
+          {/* Sign In Link */}
+          <div className="text-center">
+            <p className="text-sm text-gray-600">
+              Already have an account?{" "}
+              <Link
+                href="/"
+                className="font-medium text-sky-600 hover:text-sky-800 transition-colors"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
