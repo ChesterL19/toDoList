@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { CheckCircle, User, Lock, LogIn } from "lucide-react";
 
 const Login = () => {
   const [userName, setUserName] = useState("");
@@ -31,19 +32,7 @@ const Login = () => {
       {/* Logo/Brand Section */}
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-cyan-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
+          <CheckCircle className="w-8 h-8 text-white" />
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
         <p className="text-gray-600">Sign in to your account to continue</p>
@@ -67,19 +56,7 @@ const Login = () => {
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+              <User className="h-5 w-5 text-gray-400" />
             </div>
             <input
               id="username"
@@ -87,7 +64,7 @@ const Login = () => {
               value={userName}
               placeholder="Enter your username"
               onChange={(e) => setUserName(e.target.value)}
-              className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 bg-white hover:border-gray-400"
+              className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
               required
             />
           </div>
@@ -103,19 +80,7 @@ const Login = () => {
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
+              <Lock className="h-5 w-5 text-gray-400" />
             </div>
             <input
               id="password"
@@ -124,7 +89,7 @@ const Login = () => {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
               className="block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 
-              focus:ring-amber-500 focus:border-amber-500 transition-all duration-200 bg-white hover:border-gray-400"
+              focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 bg-white text-gray-900 hover:border-gray-400"
               required
             />
           </div>
@@ -137,7 +102,7 @@ const Login = () => {
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+              className="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300 rounded"
             />
             <label
               htmlFor="remember-me"
@@ -164,19 +129,7 @@ const Login = () => {
           hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
         >
           <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-            <svg
-              className="h-5 w-5 text-amber-200 group-hover:text-amber-100 transition-colors"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-              />
-            </svg>
+            <LogIn className="h-5 w-5 text-emerald-200 group-hover:text-emerald-100 transition-colors" />
           </span>
           Sign in
         </button>
@@ -196,7 +149,7 @@ const Login = () => {
         {/* Google Sign In */}
         <button
           type="button"
-          className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-all duration-200"
+          className="w-full flex justify-center items-center px-4 py-3 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200"
         >
           <Image
             className="h-5 w-5 mr-2"
